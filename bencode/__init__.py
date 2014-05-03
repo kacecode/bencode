@@ -70,7 +70,7 @@ def bdecode(x):
         raise BTFailure("invalid bencoded value (data after valid prefix)")
     return r
 
-from types import StringType, IntType, LongType, DictType, ListType, TupleType
+from types import StringType, IntType, LongType, DictType, ListType, TupleType, UnicodeType
 
 
 class Bencached(object):
@@ -95,6 +95,10 @@ def encode_bool(x, r):
 def encode_string(x, r):
     r.extend((str(len(x)), ':', x))
 
+def encode_unicode(x, r):
+    x = x.encode('utf-8')
+    r.extend((str(len(x)), ':', x))
+
 def encode_list(x, r):
     r.append('l')
     for i in x:
@@ -115,6 +119,7 @@ encode_func[Bencached] = encode_bencached
 encode_func[IntType] = encode_int
 encode_func[LongType] = encode_int
 encode_func[StringType] = encode_string
+encode_func[UnicodeType] = encode_unicode
 encode_func[ListType] = encode_list
 encode_func[TupleType] = encode_list
 encode_func[DictType] = encode_dict

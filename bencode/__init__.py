@@ -10,7 +10,7 @@
 
 # Written by Petru Paler
 
-from BTL import BTFailure
+from .BTL import BTFailure
 
 
 def decode_int(x, f):
@@ -70,8 +70,6 @@ def bdecode(x):
         raise BTFailure("invalid bencoded value (data after valid prefix)")
     return r
 
-from types import StringType, IntType, LongType, DictType, ListType, TupleType, UnicodeType
-
 
 class Bencached(object):
 
@@ -116,17 +114,16 @@ def encode_dict(x,r):
 
 encode_func = {}
 encode_func[Bencached] = encode_bencached
-encode_func[IntType] = encode_int
-encode_func[LongType] = encode_int
-encode_func[StringType] = encode_string
-encode_func[UnicodeType] = encode_unicode
-encode_func[ListType] = encode_list
-encode_func[TupleType] = encode_list
-encode_func[DictType] = encode_dict
+encode_func[int] = encode_int
+encode_func[int] = encode_int
+encode_func[bytes] = encode_string
+encode_func[str] = encode_unicode
+encode_func[list] = encode_list
+encode_func[tuple] = encode_list
+encode_func[dict] = encode_dict
 
 try:
-    from types import BooleanType
-    encode_func[BooleanType] = encode_bool
+    encode_func[bool] = encode_bool
 except ImportError:
     pass
 
